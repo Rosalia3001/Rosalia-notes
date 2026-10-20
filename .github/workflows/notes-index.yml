@@ -1,0 +1,59 @@
+name: notes-index
+
+# 每次 notes/ 下有 markdown 变更时，重建根目录的 notes-index.json
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'notes/**.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rebuild index
+        run: |
+          python3 - <<'PY'
+          import json, os, re
+
+          files = sorted((f for f in os.listdir('notes') if f.endswith('.md')), reverse=True)
+          out = []
+          for f in files:
+              path = os.path.join('notes', f)
+              title = None
+              with open(path, encoding='utf-8') as fh:
+                  for line in fh:
+                      if line.startswith('# '):
+                          title = line[2:].strip()
+                          break
+              m = re.match(r'(\d{4}-\d{2}-\d{2})', f)
+              out.append({
+                  'file': f,
+                  'title': title or f[:-3],
+                  'date': m.group(1) if m else '',
+                  'size': os.path.getsize(path),
+              })
+
+          with open('notes-index.json', 'w', encoding='utf-8') as fh:
+              json.dump(out, fh, ensure_ascii=False, indent=2)
+              fh.write('\n')
+          print('indexed', len(out), 'notes')
+          PY
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add notes-index.json
+          if git diff --staged --quiet; then
+            echo "index unchanged"
+          else
+            git commit -m "chore: 更新笔记索引"
+            git push
+          fi
