@@ -1,12 +1,6 @@
----
-title: GitHub 零基础入门（视频笔记）
-date: 2026-10-20
-tags: [github, git, 入门]
-status: draft
-source: https://www.bilibili.com/video/BV14Y3p6uE6b/
----
-
 # GitHub 零基础入门（视频笔记）
+
+> 2026-10-20 · 来源：[BV14Y3p6uE6b](https://www.bilibili.com/video/BV14Y3p6uE6b/)
 
 ## 一句话结论
 
@@ -152,12 +146,12 @@ git push -u origin main
 
 ## 和我的笔记仓库对照
 
-这个仓库（`Rosalia3001/-`）本身就是按这套机制搭的，可以当练手样本：
+这个仓库本身就可以当练手样本：
 
 - `README.md` 对应「这是什么、怎么用」
-- `notes/` 下的文件就是被版本控制的普通文件
-- 每次写完笔记 commit 一次，历史里能翻到任何一天的版本
-- `scripts/build_index.py` 生成的 `INDEX.md` 相当于仓库的「目录页」
+- `notes/` 下的 md 文件就是被版本控制的普通文件
+- 每次写完 commit 一次，历史里能翻到任何一天的版本
+- 文件名带日期前缀，文件夹排序天然就是时间线
 - 仓库是 **private**，只有自己可见，练手不怕丢人
 
 ## 我还没搞懂
